@@ -34,22 +34,53 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Contact Form Handling
 const contactForm = document.getElementById('contactForm');
 
+// Create a success message element
+function showFormMessage(message, isSuccess) {
+    // Remove any existing message
+    const existingMessage = contactForm.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create new message element
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'form-message';
+    messageDiv.textContent = message;
+    messageDiv.style.cssText = `
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 500;
+        background-color: ${isSuccess ? '#d4edda' : '#f8d7da'};
+        color: ${isSuccess ? '#155724' : '#721c24'};
+        border: 1px solid ${isSuccess ? '#c3e6cb' : '#f5c6cb'};
+    `;
+    
+    contactForm.appendChild(messageDiv);
+    
+    // Remove message after 5 seconds
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 5000);
+}
+
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
     
     // Simple validation
     if (name && email && message) {
         // Display success message
-        alert('Thank you for your message! We will get back to you soon.');
+        showFormMessage('Thank you for your message! We will get back to you soon.', true);
         
         // Reset form
         contactForm.reset();
     } else {
-        alert('Please fill in all fields.');
+        showFormMessage('Please fill in all fields.', false);
     }
 });
 
@@ -110,7 +141,7 @@ window.addEventListener('scroll', () => {
                 position: fixed;
                 bottom: 20px;
                 right: 20px;
-                background-color: var(--primary-color);
+                background-color: #3498db;
                 color: white;
                 border: none;
                 border-radius: 50%;
